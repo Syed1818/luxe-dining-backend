@@ -1,0 +1,138 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\qrmenuapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:qrmenuapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\models\\menuitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:models\\menuitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|c:\\users\\dell\\downloads\\qrmenuapi\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AEAFC12-F022-17CB-1513-1CAD67D7EA2F}|QRMenuAPI.csproj|solutionrelative:models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MenuController.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Controllers\\MenuController.cs",
+              "RelativeDocumentMoniker": "Controllers\\MenuController.cs",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Controllers\\MenuController.cs",
+              "RelativeToolTip": "Controllers\\MenuController.cs",
+              "ViewState": "AgIAABgAAADgMjMzMzMhwD4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T13:18:24.878Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OrdersController.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Controllers\\OrdersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\OrdersController.cs",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "Controllers\\OrdersController.cs",
+              "ViewState": "AgIAAB8AAABALDMzMzMpwDsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T13:16:59.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "OrderItem.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Models\\OrderItem.cs",
+              "RelativeDocumentMoniker": "Models\\OrderItem.cs",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Models\\OrderItem.cs",
+              "RelativeToolTip": "Models\\OrderItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:53:08.413Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Order.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Models\\Order.cs",
+              "RelativeDocumentMoniker": "Models\\Order.cs",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Models\\Order.cs",
+              "RelativeToolTip": "Models\\Order.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:52:59.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MenuItem.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Models\\MenuItem.cs",
+              "RelativeDocumentMoniker": "Models\\MenuItem.cs",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Models\\MenuItem.cs",
+              "RelativeToolTip": "Models\\MenuItem.cs",
+              "ViewState": "AgIAAAMAAAAAMDMzMzMLwAwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:52:42.931Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAB8AAACAKjMzMzMbwCsAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:41:54.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "QRMenuAPI.csproj",
+              "DocumentMoniker": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\QRMenuAPI.csproj",
+              "RelativeDocumentMoniker": "QRMenuAPI.csproj",
+              "ToolTip": "C:\\Users\\DELL\\Downloads\\QRMenuAPI\\QRMenuAPI.csproj",
+              "RelativeToolTip": "QRMenuAPI.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-04-06T09:40:25.427Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
