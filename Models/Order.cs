@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations; // <-- Added here too
+using System.ComponentModel.DataAnnotations;
 
 namespace QRMenuAPI.Models
 {
@@ -9,7 +9,7 @@ namespace QRMenuAPI.Models
         [Key]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string OrderID { get; set; }
+        public string? OrderID { get; set; } // <--- Add the ? here to make it nullable!
 
         public int TableID { get; set; }
         public string CustomerName { get; set; } = string.Empty;

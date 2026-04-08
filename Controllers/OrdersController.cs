@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using QRMenuAPI.Data;
 using QRMenuAPI.Hubs;
 using QRMenuAPI.Models;
-using System.Net;
-using System.Net.Mail;
 
 namespace QRMenuAPI.Controllers
 {
@@ -18,12 +16,17 @@ namespace QRMenuAPI.Controllers
         private readonly RestaurantContext _context;
         private readonly IHubContext<OrderHub> _hubContext;
 
-        public OrdersController(RestaurantContext context, IHubContext<OrderHub> hubContext) { _context = context; _hubContext = hubContext; }
+        public OrdersController(RestaurantContext context, IHubContext<OrderHub> hubContext) 
+        { 
+            _context = context; 
+            _hubContext = hubContext; 
+        }
 
         [HttpGet("active")]
         public async Task<ActionResult<IEnumerable<Order>>> GetActiveOrders()
         {
-            return await _context.Orders.Include(o => o.OrderItems)
+            // FIX: Removed .Include(o => o.OrderItems) -> MongoDB does this automatically!
+            return await _context.Orders
                 .Where(o => o.Status == "Received" || o.Status == "Preparing")
                 .OrderBy(o => o.OrderTime).ToListAsync();
         }

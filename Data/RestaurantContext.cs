@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QRMenuAPI.Models;
-using MongoDB.EntityFrameworkCore.Extensions; // Required for EF Core MongoDB
+using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace QRMenuAPI.Data
 {
@@ -15,9 +15,11 @@ namespace QRMenuAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // FORCE EF Core to look at the exact collections where you pasted the 50 items
             modelBuilder.Entity<MenuItem>().ToCollection("MenuItems");
             modelBuilder.Entity<Order>().ToCollection("Orders");
+
+            // CRITICAL FIX: Tell C# that OrderItems live INSIDE the Order document!
+            modelBuilder.Entity<Order>().OwnsMany(o => o.OrderItems);
         }
     }
 }
