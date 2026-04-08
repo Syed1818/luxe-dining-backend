@@ -16,21 +16,18 @@ namespace QRMenuAPI.Controllers
             _context = context;
         }
 
-        // GET: api/menu (Customer Facing - Only Available Items)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MenuItem>>> GetActiveMenu()
         {
             return await _context.MenuItems.Where(m => m.IsAvailable).ToListAsync();
         }
 
-        // GET: api/menu/all (Admin Facing - All Items)
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<MenuItem>>> GetAllMenu()
         {
             return await _context.MenuItems.ToListAsync();
         }
 
-        // POST: api/menu (Admin - Add Item)
         [HttpPost]
         public async Task<ActionResult<MenuItem>> AddMenuItem(MenuItem item)
         {
@@ -39,9 +36,9 @@ namespace QRMenuAPI.Controllers
             return CreatedAtAction(nameof(GetActiveMenu), new { id = item.ItemID }, item);
         }
 
-        // PUT: api/menu/5 (Admin - Update Item)
+        // UPDATE: Change "int id" to "string id"
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMenuItem(int id, MenuItem item)
+        public async Task<IActionResult> UpdateMenuItem(string id, MenuItem item)
         {
             if (id != item.ItemID) return BadRequest();
             _context.Entry(item).State = EntityState.Modified;
@@ -49,9 +46,9 @@ namespace QRMenuAPI.Controllers
             return NoContent();
         }
 
-        // DELETE: api/menu/5 (Admin - Delete Item)
+        // UPDATE: Change "int id" to "string id"
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMenuItem(int id)
+        public async Task<IActionResult> DeleteMenuItem(string id)
         {
             var item = await _context.MenuItems.FindAsync(id);
             if (item == null) return NotFound();

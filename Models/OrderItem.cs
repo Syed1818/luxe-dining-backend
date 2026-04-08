@@ -7,7 +7,7 @@ namespace QRMenuAPI.Models
         [Key]
         public int OrderItemID { get; set; }
         public int OrderID { get; set; }
-        public int ItemID { get; set; }
+        public string ItemID { get; set; }
         public int Quantity { get; set; }
         public string? SpecialInstructions { get; set; }
     }
