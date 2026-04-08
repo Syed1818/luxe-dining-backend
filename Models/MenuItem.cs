@@ -5,6 +5,7 @@ namespace QRMenuAPI.Models
 {
     public class MenuItem
     {
+        [Key]
         // 1. Tell EF Core to map MongoDB's internal _id to this property
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
