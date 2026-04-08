@@ -9,7 +9,8 @@ namespace QRMenuAPI.Models
         [Key]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? OrderID { get; set; } // <--- Add the ? here to make it nullable!
+        // CRITICAL FIX: Auto-generate a new MongoDB ID instantly!
+        public string OrderID { get; set; } = ObjectId.GenerateNewId().ToString();
 
         public int TableID { get; set; }
         public string CustomerName { get; set; } = string.Empty;

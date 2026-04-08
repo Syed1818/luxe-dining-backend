@@ -35,28 +35,28 @@ namespace QRMenuAPI.Controllers
                 .OrderBy(o => o.OrderTime).ToListAsync();
         }
 
-        [HttpPost]
+[HttpPost]
         public async Task<ActionResult> PlaceOrder(Order incomingOrder)
         {
             try 
             {
+                // BULLETPROOF FALLBACK: If the frontend sends a null ID, create one immediately!
+                if (string.IsNullOrEmpty(incomingOrder.OrderID))
+                {
+                    incomingOrder.OrderID = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+                }
+
                 incomingOrder.Status = "Received";
                 _context.Orders.Add(incomingOrder);
                 
-                // 1. Save to MongoDB
                 await _context.SaveChangesAsync();
 
-                // 2. Ping the Kitchen Dashboard
                 await _hubContext.Clients.All.SendAsync("ReceiveNewOrder", incomingOrder);
                 
-                // 3. Email Logic (Temporarily disabled to prevent crashes)
-                // SendReceiptEmail(incomingOrder); 
-
                 return Ok(incomingOrder);
             }
             catch (Exception ex)
             {
-                // This catches the crash and prints it to Render instead of throwing a Network Error!
                 Console.WriteLine($"🚨 CRITICAL ORDER CRASH: {ex.Message}");
                 if (ex.InnerException != null) 
                 {
