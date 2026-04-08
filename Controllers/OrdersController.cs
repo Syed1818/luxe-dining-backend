@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using QRMenuAPI.Data;
 using QRMenuAPI.Hubs;
 using QRMenuAPI.Models;
-using System.Net; // Needed for Email
-using System.Net.Mail; // Needed for Email
+using System.Net.Http; // Needed for Resend API
+using System.Text; // Needed for JSON formatting
+using System.Text.Json; // Needed for JSON formatting
 
 namespace QRMenuAPI.Controllers
 {
@@ -19,6 +20,9 @@ namespace QRMenuAPI.Controllers
     {
         private readonly RestaurantContext _context;
         private readonly IHubContext<OrderHub> _hubContext;
+        
+        // Setup a single HTTP client for the Resend API
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public OrdersController(RestaurantContext context, IHubContext<OrderHub> hubContext) 
         { 
@@ -50,8 +54,8 @@ namespace QRMenuAPI.Controllers
                 await _context.SaveChangesAsync();
                 await _hubContext.Clients.All.SendAsync("ReceiveNewOrder", incomingOrder);
                 
-                // Fire the email securely!
-                SendReceiptEmail(incomingOrder); 
+                // 📧 FIRE AND FORGET: Triggers the email in the background instantly!
+                _ = SendReceiptEmailAsync(incomingOrder); 
 
                 return Ok(incomingOrder);
             }
@@ -80,49 +84,54 @@ namespace QRMenuAPI.Controllers
         }
 
         // ==========================================
-        // 📧 SAFE EMAIL LOGIC
+        // 📧 RESEND API LOGIC
         // ==========================================
-        private void SendReceiptEmail(Order order)
+        private async Task SendReceiptEmailAsync(Order order)
         {
             try
             {
-                if (string.IsNullOrEmpty(order.CustomerEmail)) return; 
+                if (string.IsNullOrEmpty(order.CustomerEmail)) return;
 
-                // CHANGE THESE TWO LINES:
-                var fromAddress = new MailAddress("jabeen9945425979@gmail.com", "Luxe Dining");
-                const string fromPassword = "zsmlfcxuiovvhnbc"; 
-
-                var toAddress = new MailAddress(order.CustomerEmail);
-                const string subject = "Your Luxe Dining Receipt";
+                // 1. GET THIS FROM RESEND.COM
+                string resendApiKey = "re_UyF8GYoD_Ji59M6db9mKU5wpszxouuwoh"; 
+                
+                // 2. Resend Sandbox mode requires you to send from this exact email address:
+                string fromEmail = "onboarding@resend.dev"; 
 
                 string shortId = order.OrderID.Substring(Math.Max(0, order.OrderID.Length - 6)).ToUpper();
-                string body = $"<h2>Thank you for dining with us, {order.CustomerName}!</h2>";
-                body += $"<p>Order ID: #{shortId}</p>";
-                body += $"<p>Your order has been received by the kitchen and is currently being prepared.</p>";
+                string htmlBody = $"<h2>Thank you for dining with us, {order.CustomerName}!</h2>" +
+                                  $"<p>Order ID: #{shortId}</p>" +
+                                  $"<p>Your order has been received by the kitchen and is currently being prepared.</p>";
 
-                var smtp = new SmtpClient
+                var payload = new
                 {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                    from = $"Luxe Dining <{fromEmail}>",
+                    to = new[] { order.CustomerEmail },
+                    subject = "Your Luxe Dining Receipt",
+                    html = htmlBody
                 };
 
-                using (var message = new MailMessage(fromAddress, toAddress)
+                var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+                
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.resend.com/emails");
+                request.Headers.Add("Authorization", $"Bearer {resendApiKey}");
+                request.Content = content;
+
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    Subject = subject, Body = body, IsBodyHtml = true
-                })
-                {
-                    smtp.Send(message);
+                    Console.WriteLine($"✅ Receipt successfully sent via Resend to {order.CustomerEmail}");
                 }
-                Console.WriteLine($"✅ Receipt successfully emailed to {order.CustomerEmail}");
+                else
+                {
+                    string error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"⚠️ Resend API Failed: {response.StatusCode} - {error}");
+                }
             }
             catch (Exception ex)
             {
-                // If the email fails, it logs the error but DOES NOT crash the customer's order!
-                Console.WriteLine($"⚠️ Email Failed: {ex.Message}");
+                Console.WriteLine($"⚠️ Email Task Crashed: {ex.Message}");
             }
         }
     }
