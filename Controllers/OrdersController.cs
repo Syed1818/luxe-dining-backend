@@ -53,18 +53,16 @@ namespace QRMenuAPI.Controllers
                 await _hubContext.Clients.All.SendAsync("ReceiveNewOrder", incomingOrder);
                 
                 // =================================================================
-                // 💎 GENERATE THE LUXE HTML RECEIPT
+                // 💎 THE LUXE "SUCCESS MODAL" EMAIL TEMPLATE
                 // =================================================================
                 if (!string.IsNullOrEmpty(incomingOrder.CustomerEmail))
                 {
-                    // 1. Fetch the real food names and prices from the database
                     var itemIds = incomingOrder.OrderItems.Select(i => i.ItemID).ToList();
                     var menuItems = await _context.MenuItems.Where(m => itemIds.Contains(m.ItemID)).ToListAsync();
 
                     decimal totalBill = 0;
                     string itemsHtml = "";
 
-                    // 2. Build the receipt rows
                     foreach (var oi in incomingOrder.OrderItems)
                     {
                         var foodItem = menuItems.FirstOrDefault(m => m.ItemID == oi.ItemID);
@@ -75,10 +73,10 @@ namespace QRMenuAPI.Controllers
                             
                             itemsHtml += $@"
                             <tr>
-                                <td style='padding: 10px 0; color: #d4d4d8; border-bottom: 1px solid #27272a;'>
-                                    <span style='color: #f59e0b; font-weight: bold; margin-right: 8px;'>{oi.Quantity}x</span> {foodItem.Name}
+                                <td style='padding: 12px 0; color: #e4e4e7; font-size: 15px; border-bottom: 1px solid #3f3f46;'>
+                                    <span style='color: #f59e0b; font-weight: bold; margin-right: 10px; background-color: rgba(245, 158, 11, 0.1); padding: 2px 6px; border-radius: 4px;'>{oi.Quantity}x</span> {foodItem.Name}
                                 </td>
-                                <td style='padding: 10px 0; text-align: right; color: #d4d4d8; border-bottom: 1px solid #27272a;'>
+                                <td style='padding: 12px 0; text-align: right; color: #a1a1aa; font-size: 15px; border-bottom: 1px solid #3f3f46;'>
                                     ${lineTotal.ToString("0.00")}
                                 </td>
                             </tr>";
@@ -87,41 +85,61 @@ namespace QRMenuAPI.Controllers
 
                     string shortId = incomingOrder.OrderID.Substring(Math.Max(0, incomingOrder.OrderID.Length - 6)).ToUpper();
 
-                    // 3. The Dark-Theme HTML Template
+                    // HTML STRUCTURE MATCHING THE FRONTEND MODAL
                     string htmlBody = $@"
-                    <div style='font-family: ""Helvetica Neue"", Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #09090b; color: #ffffff; padding: 40px; border-radius: 16px; border: 1px solid #27272a;'>
-                        <div style='text-align: center; margin-bottom: 30px;'>
-                            <h1 style='color: #f59e0b; margin: 0; font-size: 28px; letter-spacing: 2px;'>LUXE DINING</h1>
-                            <p style='color: #a1a1aa; font-size: 12px; text-transform: uppercase; letter-spacing: 3px; margin-top: 5px;'>Digital Receipt</p>
-                        </div>
-
-                        <p style='font-size: 16px; color: #e4e4e7;'>Hello <strong>{incomingOrder.CustomerName}</strong>,</p>
-                        <p style='color: #a1a1aa; line-height: 1.6; margin-bottom: 30px;'>Your order has been sent to the kitchen. We hope you enjoy your meal!</p>
-
-                        <div style='background-color: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 25px;'>
-                            <div style='display: flex; justify-content: space-between; margin-bottom: 20px;'>
-                                <p style='margin: 0; color: #a1a1aa; font-size: 14px;'>Order <strong style='color: #ffffff;'>#{shortId}</strong></p>
-                                <p style='margin: 0; color: #f59e0b; font-weight: bold; font-size: 14px;'>Table {incomingOrder.TableID}</p>
+                    <div style='background-color: #000000; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, Helvetica, Arial, sans-serif; color: #ffffff;'>
+                        <div style='max-width: 500px; margin: 0 auto; background-color: #1A1A1A; border: 1px solid #27272a; border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);'>
+                            
+                            <div style='text-align: center; padding: 40px 30px 10px;'>
+                                <div style='width: 72px; height: 72px; background-color: rgba(34, 197, 94, 0.1); border-radius: 50%; margin: 0 auto 20px; display: table;'>
+                                    <div style='display: table-cell; vertical-align: middle;'>
+                                        <div style='width: 48px; height: 48px; background-color: #22c55e; border-radius: 50%; margin: 0 auto; display: table;'>
+                                            <div style='display: table-cell; vertical-align: middle; color: white; font-size: 24px; font-weight: bold;'>✓</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h1 style='color: #ffffff; font-size: 24px; margin: 0 0 8px;'>Success</h1>
+                                <p style='color: #a1a1aa; font-size: 14px; margin: 0;'>Your order has been placed successfully, {incomingOrder.CustomerName}.</p>
                             </div>
-                            
-                            <table style='width: 100%; border-collapse: collapse;'>
-                                {itemsHtml}
-                            </table>
-                            
-                            <table style='width: 100%; margin-top: 15px;'>
-                                <tr>
-                                    <td style='text-align: left; font-size: 14px; color: #a1a1aa; padding-top: 10px;'>Total Amount</td>
-                                    <td style='text-align: right; font-weight: bold; font-size: 24px; color: #f59e0b; padding-top: 10px;'>${totalBill.ToString("0.00")}</td>
-                                </tr>
-                            </table>
-                        </div>
 
-                        <p style='text-align: center; color: #71717a; font-size: 12px; margin-top: 40px;'>
-                            © {DateTime.Now.Year} Luxe Dining. All rights reserved.
-                        </p>
+                            <div style='padding: 30px;'>
+                                <div style='background-color: #242424; border: 1px solid #3f3f46; border-radius: 12px; padding: 25px;'>
+                                    <h2 style='color: #ffffff; margin: 0 0 15px 0; font-size: 16px; border-bottom: 1px solid #3f3f46; padding-bottom: 10px;'>Order Details</h2>
+                                    
+                                    <table style='width: 100%; margin-bottom: 20px;'>
+                                        <tr>
+                                            <td style='color: #a1a1aa; font-size: 14px; padding: 4px 0;'>Order ID:</td>
+                                            <td style='text-align: right; color: #f59e0b; font-family: monospace; font-size: 16px; font-weight: bold;'>#{shortId}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style='color: #a1a1aa; font-size: 14px; padding: 4px 0;'>Table Number:</td>
+                                            <td style='text-align: right; color: #ffffff; font-size: 16px; font-weight: bold;'>{incomingOrder.TableID}</td>
+                                        </tr>
+                                    </table>
+
+                                    <table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>
+                                        {itemsHtml}
+                                    </table>
+
+                                    <table style='width: 100%;'>
+                                        <tr>
+                                            <td style='color: #a1a1aa; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding-top: 10px;'>Total Bill</td>
+                                            <td style='text-align: right; color: #ffffff; font-size: 24px; font-weight: 300; padding-top: 10px;'>${totalBill.ToString("0.00")}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style='padding: 0 30px 40px; text-align: center;'>
+                                <p style='color: #71717a; font-size: 12px; margin: 0;'>
+                                    This is an automated receipt from Luxe Dining.<br/>
+                                    Please keep this for your records.
+                                </p>
+                            </div>
+
+                        </div>
                     </div>";
 
-                    // 4. Fire the email in the background!
                     _ = SendReceiptEmailAsync(incomingOrder.CustomerEmail, "Your Luxe Dining Receipt", htmlBody);
                 }
 
@@ -158,7 +176,7 @@ namespace QRMenuAPI.Controllers
         {
             try
             {
-                string resendApiKey = "re_UyF8GYoD_Ji59M6db9mKU5wpszxouuwoh"; // <--- PUT YOUR RESEND API KEY HERE
+                string resendApiKey = "re_UyF8GYoD_Ji59M6db9mKU5wpszxouuwoh"; // <--- REPLACE THIS
                 string fromEmail = "onboarding@resend.dev"; 
 
                 var payload = new
