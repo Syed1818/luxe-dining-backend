@@ -9,7 +9,6 @@ namespace QRMenuAPI.Models
         [Key]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        // CRITICAL FIX: Auto-generate a new MongoDB ID instantly!
         public string OrderID { get; set; } = ObjectId.GenerateNewId().ToString();
 
         public int TableID { get; set; }
@@ -18,6 +17,7 @@ namespace QRMenuAPI.Models
         public string Status { get; set; } = "Received";
         public DateTime OrderTime { get; set; } = DateTime.UtcNow;
 
-        public List<OrderItem> OrderItems { get; set; } = new();
+        // Ensure the list is never null
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

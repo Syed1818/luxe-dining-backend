@@ -1,14 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace QRMenuAPI.Models
 {
     public class OrderItem
     {
         [Key]
-        public int OrderItemID { get; set; }
-        public int OrderID { get; set; }
-        public string ItemID { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        // This generates a unique ID for this specific row in the cart
+        public string OrderItemID { get; set; } = ObjectId.GenerateNewId().ToString();
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ItemID { get; set; } = string.Empty;
+
         public int Quantity { get; set; }
-        public string? SpecialInstructions { get; set; }
     }
 }
