@@ -120,7 +120,7 @@ namespace QRMenuAPI.Controllers
 
         private async Task SendResendEmail(string to, string subject, string html)
         {
-            string apiKey = "rre_UyF8GYoD_Ji59M6db9mKU5wpszxouuwoh"; // <--- Replace with your key!
+            string apiKey = "re_UyF8GYoD_Ji59M6db9mKU5wpszxouuwoh"; // <--- Replace with your key!
             var payload = new { from = "Luxe Dining <onboarding@resend.dev>", to = new[] { to }, subject, html };
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.resend.com/emails");
             request.Headers.Add("Authorization", $"Bearer {apiKey}");
