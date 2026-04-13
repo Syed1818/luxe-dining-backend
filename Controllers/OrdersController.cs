@@ -64,7 +64,12 @@ namespace QRMenuAPI.Controllers
                 // Fire Email in background
                 if (!string.IsNullOrEmpty(incomingOrder.CustomerEmail))
                 {
-                    _ = Task.Run(() => PrepareAndSendEmail(incomingOrder));
+                    // FIX 1: Fetch the menu items HERE while _context is still alive
+                    var itemIds = incomingOrder.OrderItems.Select(i => i.ItemID).ToList();
+                    var menuItemsForEmail = await _context.MenuItems.Where(m => itemIds.Contains(m.ItemID)).ToListAsync();
+
+                    // Pass the fetched items directly into the background task
+                    _ = Task.Run(() => PrepareAndSendEmail(incomingOrder, menuItemsForEmail));
                 }
 
                 return Ok(incomingOrder);
@@ -76,13 +81,11 @@ namespace QRMenuAPI.Controllers
             }
         }
 
-        private async Task PrepareAndSendEmail(Order order)
+        // FIX 2: Added List<MenuItem> parameter so this method doesn't need to touch the database
+        private async Task PrepareAndSendEmail(Order order, List<MenuItem> menuItems)
         {
             try
             {
-                var itemIds = order.OrderItems.Select(i => i.ItemID).ToList();
-                var menuItems = await _context.MenuItems.Where(m => itemIds.Contains(m.ItemID)).ToListAsync();
-
                 decimal total = 0;
                 string itemsHtml = "";
 
@@ -120,12 +123,23 @@ namespace QRMenuAPI.Controllers
 
         private async Task SendResendEmail(string to, string subject, string html)
         {
-            string apiKey = "re_aVqxFnBW_MnKGNGwDBwpJVzCKLEtf5W4j"; // <--- Replace with your key!
+            string apiKey = "re_aVqxFnBW_MnKGNGwDBwpJVzCKLEtf5W4j";
             var payload = new { from = "Luxe Dining <onboarding@resend.dev>", to = new[] { to }, subject, html };
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.resend.com/emails");
             request.Headers.Add("Authorization", $"Bearer {apiKey}");
             request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
-            await _httpClient.SendAsync(request);
+            
+            // FIX 3: Capture the response and log it if Resend blocks the email
+            var response = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorResponse = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"⚠️ RESEND API ERROR ({response.StatusCode}): {errorResponse}");
+            }
+            else
+            {
+                Console.WriteLine("✅ Email sent successfully to Resend!");
+            }
         }
 
         [HttpPut("{id}/status")]
