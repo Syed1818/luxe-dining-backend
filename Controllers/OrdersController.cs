@@ -64,7 +64,7 @@ namespace QRMenuAPI.Controllers
                 // Fire Email in background
                 if (!string.IsNullOrEmpty(incomingOrder.CustomerEmail))
                 {
-                    // FIX 1: Fetch the menu items HERE while _context is still alive
+                    // Fetch the menu items HERE while _context is still alive
                     var itemIds = incomingOrder.OrderItems.Select(i => i.ItemID).ToList();
                     var menuItemsForEmail = await _context.MenuItems.Where(m => itemIds.Contains(m.ItemID)).ToListAsync();
 
@@ -81,7 +81,6 @@ namespace QRMenuAPI.Controllers
             }
         }
 
-        // FIX 2: Added List<MenuItem> parameter so this method doesn't need to touch the database
         private async Task PrepareAndSendEmail(Order order, List<MenuItem> menuItems)
         {
             try
@@ -123,14 +122,17 @@ namespace QRMenuAPI.Controllers
 
         private async Task SendResendEmail(string to, string subject, string html)
         {
-            string apiKey = "re_aVqxFnBW_MnKGNGwDBwpJVzCKLEtf5W4j";
-            var payload = new { from = "Luxe Dining <onboarding@resend.dev>", to = new[] { to }, subject, html };
+            string apiKey = "re_aVqxFnBW_MnKGNGwDBwpJVzCKLEtf5W4j"; 
+            
+            // USING YOUR VERIFIED DOMAIN
+            var payload = new { from = "Luxe Dining <orders@luxedining.site>", to = new[] { to }, subject, html };
+            
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.resend.com/emails");
             request.Headers.Add("Authorization", $"Bearer {apiKey}");
             request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
             
-            // FIX 3: Capture the response and log it if Resend blocks the email
             var response = await _httpClient.SendAsync(request);
+            
             if (!response.IsSuccessStatusCode)
             {
                 string errorResponse = await response.Content.ReadAsStringAsync();
@@ -138,7 +140,7 @@ namespace QRMenuAPI.Controllers
             }
             else
             {
-                Console.WriteLine("✅ Email sent successfully to Resend!");
+                Console.WriteLine($"✅ Email sent successfully to {to} via luxedining.site!");
             }
         }
 
